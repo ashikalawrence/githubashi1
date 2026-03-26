@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Hushh &mdash; TrustHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style2.css">
+<script>
+  if (localStorage.getItem('hushh_logged_in') !== 'true' && window.location.pathname.indexOf('login.html') === -1) {
+    window.location.href = 'login.html';
+  }
+</script>
+</head>
+<body>
+<div class="app" id="app">
+ 
+  <div class="topbar" id="topbar">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <div class="logo">HU<span>S</span>HH</div>
+      <div class="topbar-right" style="position:relative">
+        <div class="icon-btn" onclick="toggleNotifs()">&#128276;</div>
+        <button class="login-btn-top" id="topLoginBtn" onclick="window.location.href='login.html'">Login</button>
+        
+        <!-- Notifications Panel -->
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-header">Notifications <span class="notif-badge">3</span></div>
+          <div class="notif-list">
+            <div class="notif-item unread">
+              <div class="notif-icon" style="color:var(--amber)">&#9888;</div>
+              <div class="notif-content">
+                <div class="notif-title">Swiggy expires soon</div>
+                <div class="notif-time">10 mins ago</div>
+              </div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon" style="color:var(--green)">&#10003;</div>
+              <div class="notif-content">
+                <div class="notif-title">Flipkart reconnected</div>
+                <div class="notif-time">2 hours ago</div>
+              </div>
+            </div>
+            <div class="notif-item">
+              <div class="notif-icon" style="color:var(--red)">&#128274;</div>
+              <div class="notif-content">
+                <div class="notif-title">Netflix permission revoked</div>
+                <div class="notif-time">Yesterday</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-trust" id="sidebarTrust" style="display:none">
+     
+      <div class="sidebar-trust-meta">
+      </div>
+    </div>
+    <div class="tabs-bar" id="tabsBar">
+      <button class="tab active" onclick="switchTab('permissions',this)">&#128272; Permissions</button>
+      <button class="tab" onclick="switchTab('categories',this)">&#128193; Data Types</button>
+      <button class="tab" onclick="switchTab('services',this)">&#128279; Services</button>
+      <button class="tab" onclick="switchTab('trust',this)">&#128737; Trust Signals</button>
+    </div>
+  </div>
+  <!-- HERO -->
+  <div class="hero" id="heroBlock">
+    <div class="hero-label">TRUSTHUB</div>
+    <div class="hero-title">Your data,<br><em>fully visible.</em></div>
+    <div class="trust-row">
+      <div class="ring-wrap">
+        <svg width="68" height="68" viewBox="0 0 68 68">
+          <circle class="ring-bg" cx="34" cy="34" r="29"/>
+          <circle class="ring-fg" id="ringFg" cx="34" cy="34" r="29"/>
+        </svg>
+        <div class="ring-num">80<small>/100</small></div>
+      </div>
+      <div class="trust-meta">
+        <div class="trust-score-label">Trust Score: <strong>Strong</strong></div>
+        <div class="trust-score-sub">3 active permissions &middot; 4 connected services &middot; Audited 2 hrs ago</div>
+      </div>
+    </div>
+  </div>
+  <!-- MAIN -->
+  <div class="main" id="mainArea">
+    <!-- PERMISSIONS -->
+    <div class="section active" id="permissions">
+      <div class="section-head">
+        <span class="section-title">Active permissions</span>
+        <span class="section-count">3 active</span>
+      </div>
+      <div class="card" data-service="flipkart" data-expiry-hours="19">
+        <div class="perm-top">
+          <div class="perm-icon" style="background:rgba(251,191,36,.1)">&#128717;</div>
+          <div class="perm-meta">
+            <div class="perm-name">Flipkart &middot; Shopping</div>
+            <div class="perm-who">via Kai &middot; 2 hrs ago</div>
+          </div>
+          <div class="perm-status status-active">ACTIVE</div>
+        </div>
+        <div class="perm-tags">
+          <span class="tag">&#128722; Budget</span>
+          <span class="tag">&#128241; Device prefs</span>
+          <span class="tag">&#128205; City</span>
+        </div>
+        <div class="prog-row">
+          <span class="prog-label">Expires</span>
+          <div class="prog-track"><div class="prog-fill" style="width:80%;background:var(--amber)"></div></div>
+          <span class="prog-val expiry-display" style="color:var(--amber)">19h</span>
+        </div>
+        <div class="perm-footer">
+          <div class="perm-time expiry-label">&#9201; Auto-expires in 19 hrs</div>
+          <div class="perm-actions">
+            <button class="btn-sm btn-edit" onclick="openEditModal(this.closest('.card'))">Edit</button>
+            <button class="btn-sm btn-revoke" onclick="revokeCard(this,'Flipkart')">Revoke</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" data-service="swiggy" data-expiry-hours="2">
+        <div class="perm-top">
+          <div class="perm-icon" style="background:rgba(251,120,36,.1)">&#127828;</div>
+          <div class="perm-meta">
+            <div class="perm-name">Swiggy &middot; Food</div>
+            <div class="perm-who">via Kai &middot; yesterday</div>
+          </div>
+          <div class="perm-status status-exp">EXPIRING</div>
+        </div>
+        <div class="perm-tags">
+          <span class="tag">&#127829; Food prefs</span>
+          <span class="tag">&#128205; Home address</span>
+        </div>
+        <div class="prog-row">
+          <span class="prog-label">Expires</span>
+          <div class="prog-track"><div class="prog-fill" style="width:12%;background:var(--red)"></div></div>
+          <span class="prog-val expiry-display" style="color:var(--red)">2h</span>
+        </div>
+        <div class="perm-footer">
+          <div class="perm-time expiry-label">&#9888; Expires very soon</div>
+          <div class="perm-actions">
+            <button class="btn-sm btn-edit" onclick="openEditModal(this.closest('.card'))">Renew</button>
+            <button class="btn-sm btn-revoke" onclick="revokeCard(this,'Swiggy')">Revoke</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" data-service="hdfc" data-expiry-hours="120">
+        <div class="perm-top">
+          <div class="perm-icon" style="background:rgba(96,165,250,.1)">&#127970;</div>
+          <div class="perm-meta">
+            <div class="perm-name">HDFC SmartBuy</div>
+            <div class="perm-who">via Hushh Link &middot; 3 days ago</div>
+          </div>
+          <div class="perm-status status-active">ACTIVE</div>
+        </div>
+        <div class="perm-tags">
+          <span class="tag">&#128179; Spend category</span>
+          <span class="tag">&#127919; Rewards</span>
+        </div>
+        <div class="prog-row">
+          <span class="prog-label">Expires</span>
+          <div class="prog-track"><div class="prog-fill" style="width:60%;background:var(--green)"></div></div>
+          <span class="prog-val expiry-display" style="color:var(--green)">5d</span>
+        </div>
+        <div class="perm-footer">
+          <div class="perm-time expiry-label">&#10003; Healthy consent window</div>
+          <div class="perm-actions">
+            <button class="btn-sm btn-edit" onclick="openEditModal(this.closest('.card'))">Edit</button>
+            <button class="btn-sm btn-revoke" onclick="revokeCard(this,'HDFC SmartBuy')">Revoke</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" data-service="netflix" data-expiry-hours="24" style="opacity:.5;transition:opacity .4s">
+        <div class="perm-top">
+          <div class="perm-icon" style="background:rgba(248,113,113,.1)">&#127916;</div>
+          <div class="perm-meta">
+            <div class="perm-name">Netflix</div>
+            <div class="perm-who">Revoked &middot; 2 days ago</div>
+          </div>
+          <div class="perm-status status-rev">REVOKED</div>
+        </div>
+        <div class="perm-tags">
+          <span class="tag">&#128250; Watch history</span>
+          <span class="tag">&#9201; Viewing times</span>
+        </div>
+        <div class="prog-row" style="display:none">
+          <span class="prog-label">Expires</span>
+          <div class="prog-track"><div class="prog-fill" style="width:75%;background:var(--green)"></div></div>
+          <span class="prog-val expiry-display" style="color:var(--green)">1d</span>
+        </div>
+        <div class="perm-footer">
+          <div class="perm-time">&#128274; No data shared</div>
+          <div class="perm-actions">
+            <button class="btn-sm btn-edit" onclick="reEnableCard(this.closest('.card'))">Re-enable</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- DATA CATEGORIES -->
+    <div class="section" id="categories">
+      <div class="section-head">
+        <span class="section-title">Data in your vault</span>
+        <span class="section-count">5 types</span>
+      </div>
+      <div class="card">
+        <div class="cat-header">
+          <div class="cat-icon" style="background:rgba(248,113,113,.12)">&#128205;</div>
+          <div class="cat-info"><div class="cat-name">Location data</div><div class="cat-desc">City-level only &middot; No GPS</div></div>
+          <div class="sensitivity s-high">SENSITIVE</div>
+        </div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-label"><span>Exposure</span><span style="color:var(--red)">2 services</span></div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:40%;background:var(--red)"></div></div>
+        </div>
+        <div class="cat-footer">
+          <div class="cat-shared-by">Flipkart, Swiggy</div>
+          <div class="cat-toggle-wrap">Allow <label class="switch"><input type="checkbox" checked onchange="updateScore()"><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cat-header">
+          <div class="cat-icon" style="background:rgba(251,191,36,.12)">&#128722;</div>
+          <div class="cat-info"><div class="cat-name">Purchase history</div><div class="cat-desc">Categories only</div></div>
+          <div class="sensitivity s-med">MEDIUM</div>
+        </div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-label"><span>Exposure</span><span style="color:var(--amber)">1 service</span></div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:20%;background:var(--amber)"></div></div>
+        </div>
+        <div class="cat-footer">
+          <div class="cat-shared-by">Flipkart</div>
+          <div class="cat-toggle-wrap">Allow <label class="switch"><input type="checkbox" checked onchange="updateScore()"><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cat-header">
+          <div class="cat-icon" style="background:rgba(96,165,250,.12)">&#127919;</div>
+          <div class="cat-info"><div class="cat-name">Preferences</div><div class="cat-desc">Inferred by Kai</div></div>
+          <div class="sensitivity s-low">LOW</div>
+        </div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-label"><span>Exposure</span><span style="color:var(--green)">3 services</span></div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:60%;background:var(--green)"></div></div>
+        </div>
+        <div class="cat-footer">
+          <div class="cat-shared-by">Flipkart, Swiggy, HDFC</div>
+          <div class="cat-toggle-wrap">Allow <label class="switch"><input type="checkbox" checked onchange="updateScore()"><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cat-header">
+          <div class="cat-icon" style="background:rgba(248,113,113,.12)">&#128231;</div>
+          <div class="cat-info"><div class="cat-name">Contact info</div><div class="cat-desc">Never auto-shared</div></div>
+          <div class="sensitivity s-high">SENSITIVE</div>
+        </div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-label"><span>Exposure</span><span style="color:var(--green)">0 services</span></div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:0%;background:var(--green)"></div></div>
+        </div>
+        <div class="cat-footer">
+          <div class="cat-shared-by">Not shared</div>
+          <div class="cat-toggle-wrap">Allow <label class="switch"><input type="checkbox" onchange="updateScore()"><span class="slider"></span></label></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cat-header">
+          <div class="cat-icon" style="background:rgba(74,222,128,.12)">&#128176;</div>
+          <div class="cat-info"><div class="cat-name">Financial signals</div><div class="cat-desc">Spend range only</div></div>
+          <div class="sensitivity s-med">MEDIUM</div>
+        </div>
+        <div class="cat-bar-wrap">
+          <div class="cat-bar-label"><span>Exposure</span><span style="color:var(--amber)">2 services</span></div>
+          <div class="cat-bar-track"><div class="cat-bar-fill" style="width:40%;background:var(--amber)"></div></div>
+        </div>
+        <div class="cat-footer">
+          <div class="cat-shared-by">Flipkart, HDFC</div>
+          <div class="cat-toggle-wrap">Allow <label class="switch"><input type="checkbox" checked onchange="updateScore()"><span class="slider"></span></label></div>
+        </div>
+      </div>
+    </div>
+    <!-- SERVICES -->
+    <div class="section" id="services">
+      <div class="section-head">
+        <span class="section-title">Connected services</span>
+        <span class="section-count" id="svcCount">4 connected</span>
+      </div>
+      <div class="card" data-svc="flipkart" data-status="live" onclick="toggleExpand(this)" style="cursor:pointer">
+        <div class="svc-row">
+          <div class="svc-logo">&#128717;</div>
+          <div class="svc-meta">
+            <div class="svc-name">Flipkart</div>
+            <div class="svc-detail svc-detail-text">E-commerce &middot; 14 Mar 2026</div>
+          </div>
+          <div class="svc-right">
+            <div class="conn-dot svc-status-dot">
+              <div class="dot dot-green"></div><span style="color:var(--green)">Live</span>
+            </div>
+            <div class="svc-perms">3 types</div>
+          </div>
+        </div>
+        <div class="svc-expand">
+          <div class="svc-perm-list"><span class="svc-tag">Budget</span><span class="svc-tag">Device prefs</span><span class="svc-tag">City</span></div>
+          <button class="btn-disconnect svc-action-btn" onclick="event.stopPropagation();toggleService(this.closest('.card'))">Disconnect Flipkart</button>
+        </div>
+      </div>
+      <div class="card" data-svc="swiggy" data-status="expiring" onclick="toggleExpand(this)" style="cursor:pointer">
+        <div class="svc-row">
+          <div class="svc-logo">&#127828;</div>
+          <div class="svc-meta">
+            <div class="svc-name">Swiggy</div>
+            <div class="svc-detail svc-detail-text">Food &middot; 20 Mar 2026</div>
+          </div>
+          <div class="svc-right">
+            <div class="conn-dot svc-status-dot">
+              <div class="dot dot-amber"></div><span style="color:var(--amber)">Expiring</span>
+            </div>
+            <div class="svc-perms">2 types</div>
+          </div>
+        </div>
+        <div class="svc-expand">
+          <div class="svc-perm-list"><span class="svc-tag">Food prefs</span><span class="svc-tag">Home address</span></div>
+          <button class="btn-disconnect svc-action-btn" onclick="event.stopPropagation();toggleService(this.closest('.card'))">Disconnect Swiggy</button>
+        </div>
+      </div>
+      <div class="card" data-svc="hdfc" data-status="live" onclick="toggleExpand(this)" style="cursor:pointer">
+        <div class="svc-row">
+          <div class="svc-logo">&#127970;</div>
+          <div class="svc-meta">
+            <div class="svc-name">HDFC SmartBuy</div>
+            <div class="svc-detail svc-detail-text">Banking &middot; 22 Mar 2026</div>
+          </div>
+          <div class="svc-right">
+            <div class="conn-dot svc-status-dot">
+              <div class="dot dot-green"></div><span style="color:var(--green)">Live</span>
+            </div>
+            <div class="svc-perms">2 types</div>
+          </div>
+        </div>
+        <div class="svc-expand">
+          <div class="svc-perm-list"><span class="svc-tag">Spend category</span><span class="svc-tag">Rewards</span></div>
+          <button class="btn-disconnect svc-action-btn" onclick="event.stopPropagation();toggleService(this.closest('.card'))">Disconnect HDFC SmartBuy</button>
+        </div>
+      </div>
+      <div class="card" data-svc="netflix" data-status="off" onclick="toggleExpand(this)" style="cursor:pointer;opacity:.5">
+        <div class="svc-row">
+          <div class="svc-logo">&#127916;</div>
+          <div class="svc-meta">
+            <div class="svc-name">Netflix</div>
+            <div class="svc-detail svc-detail-text">Entertainment &middot; Disconnected</div>
+          </div>
+          <div class="svc-right">
+            <div class="conn-dot svc-status-dot">
+              <div class="dot dot-red"></div><span style="color:var(--red)">Off</span>
+            </div>
+            <div class="svc-perms">0 types</div>
+          </div>
+        </div>
+        <div class="svc-expand">
+          <div class="svc-perm-list">
+            <span class="svc-tag" style="opacity:.5">Watch history</span>
+            <span class="svc-tag" style="opacity:.5">Viewing times</span>
+          </div>
+          <button class="btn-sm btn-edit svc-action-btn" style="width:100%;padding:8px" onclick="event.stopPropagation();toggleService(this.closest('.card'))">Reconnect Netflix</button>
+        </div>
+      </div>
+    </div>
+    <!-- TRUST SIGNALS -->
+    <div class="section" id="trust">
+      <div class="section-head">
+        <span class="section-title">Trust indicators</span>
+        <span class="section-count">All clear</span>
+      </div>
+      <div class="card">
+        <div class="trust-item">
+          <div class="trust-icon-wrap" style="background:rgba(74,222,128,.12)">&#128272;</div>
+          <div class="trust-content"><div class="trust-name">End-to-end encryption</div><div class="trust-desc">AES-256 vault &middot; TLS 1.3 in transit</div></div>
+          <div class="trust-badge tb-ok">ON</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="trust-item">
+          <div class="trust-icon-wrap" style="background:rgba(96,165,250,.12)">&#128203;</div>
+          <div class="trust-content"><div class="trust-name">Audit log</div><div class="trust-desc">Every share event timestamped &amp; immutable</div></div>
+          <div class="trust-badge tb-info">LIVE</div>
+        </div>
+        <div class="audit-log">
+          <div class="audit-row"><span class="audit-time">09:14</span><span class="audit-event">Shared budget &rarr;</span><span class="audit-who">Flipkart</span></div>
+          <div class="audit-row"><span class="audit-time">09:12</span><span class="audit-event">Consent granted by</span><span class="audit-who">You</span></div>
+          <div class="audit-row"><span class="audit-time">08:55</span><span class="audit-event">Kai requested &rarr;</span><span class="audit-who">Flipkart</span></div>
+          <div class="audit-row"><span class="audit-time">Yesterday</span><span class="audit-event">Revoked &rarr;</span><span class="audit-who">Netflix</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="trust-item">
+          <div class="trust-icon-wrap" style="background:rgba(74,222,128,.12)">&#128683;</div>
+          <div class="trust-content"><div class="trust-name">Zero data selling</div><div class="trust-desc">Verified by open-source consent protocol</div></div>
+          <div class="trust-badge tb-ok">VERIFIED</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="trust-item">
+          <div class="trust-icon-wrap" style="background:rgba(251,191,36,.12)">&#9200;</div>
+          <div class="trust-content"><div class="trust-name">Consent auto-expiry</div><div class="trust-desc">No indefinite sharing &mdash; all permissions expire</div></div>
+          <div class="trust-badge tb-ok">ON</div>
+        </div>
+      </div>
+     
+      <div class="card">
+        <div class="trust-item">
+          <div class="trust-icon-wrap" style="background:rgba(96,165,250,.12)">&#128260;</div>
+          <div class="trust-content"><div class="trust-name">Last vault sync</div><div class="trust-desc">Synced with connected accounts 2 hours ago</div></div>
+          <div class="trust-badge tb-info">2h ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- EDIT EXPIRY MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal-sheet" id="modalSheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-service-icon" id="modalIcon">&#128717;</div>
+      <div class="modal-service-info">
+        <div class="modal-service-name" id="modalServiceName">Flipkart</div>
+        <div class="modal-service-sub">Edit permission expiry</div>
+      </div>
+      <button class="modal-close" onclick="closeEditModal()">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div class="expiry-current">
+        <div class="expiry-current-label">Current expiry</div>
+        <div class="expiry-current-value" id="modalCurrentExpiry">19 hours</div>
+      </div>
+      <div class="modal-section-label">Quick select</div>
+      <div class="preset-grid">
+        <button class="preset-btn" data-hours="1"   onclick="selectPreset(this,1)">1 hr</button>
+        <button class="preset-btn" data-hours="6"   onclick="selectPreset(this,6)">6 hrs</button>
+        <button class="preset-btn" data-hours="12"  onclick="selectPreset(this,12)">12 hrs</button>
+        <button class="preset-btn" data-hours="24"  onclick="selectPreset(this,24)">1 day</button>
+        <button class="preset-btn" data-hours="72"  onclick="selectPreset(this,72)">3 days</button>
+        <button class="preset-btn" data-hours="168" onclick="selectPreset(this,168)">1 week</button>
+        <button class="preset-btn" data-hours="336" onclick="selectPreset(this,336)">2 weeks</button>
+        <button class="preset-btn" data-hours="720" onclick="selectPreset(this,720)">30 days</button>
+      </div>
+      <div class="modal-section-label">Custom duration</div>
+      <div class="custom-expiry-row">
+        <input class="custom-expiry-input" id="customExpiryValue" type="number" min="1" max="8760" placeholder="Enter value" oninput="onCustomInput()"/>
+        <div class="custom-unit-toggle">
+          <button class="unit-btn active" id="unitHours" onclick="setUnit('hours')">Hours</button>
+          <button class="unit-btn" id="unitDays"  onclick="setUnit('days')">Days</button>
+        </div>
+      </div>
+      <div class="expiry-preview">
+        <span class="expiry-preview-icon">&#9201;</span>
+        <span class="expiry-preview-text" id="expiryPreviewText">Permission will expire in 19 hours</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-save" id="saveBtn" onclick="saveExpiry()">
+        <span id="saveBtnText">Save Changes</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"><span id="toastMsg">Done</span></div>
+<script>
+/* ── notification toggle ── */
+function toggleNotifs() {
+  var p = document.getElementById('notifPanel');
+  if(p) p.classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  var p = document.getElementById('notifPanel');
+  if (p && p.classList.contains('open') && !e.target.closest('.topbar-right')) {
+    p.classList.remove('open');
+  }
+});
+window.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('topLoginBtn');
+  if (btn && localStorage.getItem('hushh_logged_in') === 'true') {
+    btn.textContent = 'Logout';
+    btn.onclick = function() {
+      localStorage.removeItem('hushh_logged_in');
+      window.location.href = 'login.html';
+    };
+    btn.style.background = 'var(--surface2)';
+    btn.style.color = 'var(--text)';
+    btn.style.border = '1px solid var(--border)';
+  }
+});
+/* ── orientation ── */
+var sidebarTrust = document.getElementById('sidebarTrust');
+function onOrientChange() {
+  var land = window.innerWidth > window.innerHeight;
+  sidebarTrust.style.display = land ? 'flex' : 'none';
+  if (land) { sidebarTrust.style.flexDirection = 'column'; sidebarTrust.style.gap = '8px'; }
+}
+window.addEventListener('resize', onOrientChange);
+window.addEventListener('orientationchange', onOrientChange);
+onOrientChange();
+/* ── tabs ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('mainArea').scrollTop = 0;
+}
+/* ── service expand ── */
+function toggleExpand(card) {
+  var exp = card.querySelector('.svc-expand');
+  if (exp) exp.classList.toggle('open');
+}
+/* ── toast ── */
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
+}
+/* ── trust score ── */
+function updateScore() {
+  var toggles = document.querySelectorAll('#categories input[type=checkbox]');
+  var on = 0;
+  toggles.forEach(function(t) { if (t.checked) on++; });
+  var score = Math.max(40, 95 - on * 8);
+  var circ = 182;
+  var fg = document.getElementById('ringFg');
+  if (fg) { fg.style.strokeDasharray = circ; fg.style.strokeDashoffset = circ - (score / 100) * circ; }
+  document.querySelector('.ring-num').innerHTML = score + '<small>/100</small>';
+  var sfg = document.getElementById('sideRingFg');
+  if (sfg) { var c2 = 125.6; sfg.style.strokeDashoffset = c2 - (score / 100) * c2; }
+  var lbl = score >= 80 ? 'Strong' : score >= 60 ? 'Moderate' : 'Needs review';
+  document.querySelector('.trust-score-label').innerHTML = 'Trust Score: <strong>' + lbl + '</strong>';
+  document.querySelector('.sidebar-trust-label').innerHTML = 'Trust: <strong>' + lbl + '</strong>';
+}
+/* ════════════════════════════════
+   PERMISSIONS — revoke / re-enable
+   ════════════════════════════════ */
+function revokeCard(btn, name) {
+  var card = btn.closest('.card');
+  card.style.transition = 'opacity .4s';
+  card.style.opacity = '.4';
+  var statusEl = card.querySelector('.perm-status');
+  if (statusEl) { statusEl.className = 'perm-status status-rev'; statusEl.textContent = 'REVOKED'; }
+  var whoEl = card.querySelector('.perm-who');
+  if (whoEl) whoEl.textContent = 'Revoked \u00b7 just now';
+  var progRow = card.querySelector('.prog-row');
+  if (progRow) progRow.style.display = 'none';
+  var labelEl = card.querySelector('.expiry-label') || card.querySelector('.perm-time');
+  if (labelEl) { labelEl.className = 'perm-time'; labelEl.textContent = '\ud83d\udd12 No data shared'; }
+  var actionsEl = card.querySelector('.perm-actions');
+  if (actionsEl) {
+    actionsEl.innerHTML = '';
+    var rb = document.createElement('button');
+    rb.className = 'btn-sm btn-edit';
+    rb.textContent = 'Re-enable';
+    (function(c) { rb.addEventListener('click', function() { reEnableCard(c); }); })(card);
+    actionsEl.appendChild(rb);
+  }
+  showToast('\ud83d\udd12 ' + name + ' permission revoked');
+  if (card && card.dataset && card.dataset.service) {
+    syncServiceCard(card.dataset.service, false);
+  }
+}
+function reEnableCard(card) {
+  var svcName = card.querySelector('.perm-name').textContent.split('\u00b7')[0].trim();
+  var defaultHours = 24;
+  card.style.transition = 'opacity .4s';
+  card.style.opacity = '1';
+  var statusEl = card.querySelector('.perm-status');
+  if (statusEl) { statusEl.className = 'perm-status status-active'; statusEl.textContent = 'ACTIVE'; }
+  var whoEl = card.querySelector('.perm-who');
+  if (whoEl) whoEl.textContent = 'Re-enabled \u00b7 just now';
+  var progRow = card.querySelector('.prog-row');
+  if (progRow) {
+    progRow.style.display = 'flex';
+    var fill = progRow.querySelector('.prog-fill');
+    var disp = progRow.querySelector('.expiry-display');
+    if (fill) { fill.style.background = 'var(--green)'; fill.style.width = '75%'; }
+    if (disp) { disp.textContent = '1d'; disp.style.color = 'var(--green)'; }
+  }
+  var labelEl = card.querySelector('.perm-time');
+  if (labelEl) { labelEl.className = 'perm-time expiry-label'; labelEl.textContent = '\u2713 Expires in 1 day'; }
+  var actionsEl = card.querySelector('.perm-actions');
+  if (actionsEl) {
+    actionsEl.innerHTML = '';
+    var editBtn = document.createElement('button');
+    editBtn.className = 'btn-sm btn-edit';
+    editBtn.textContent = 'Edit';
+    (function(c) { editBtn.addEventListener('click', function() { openEditModal(c); }); })(card);
+    var revokeBtn = document.createElement('button');
+    revokeBtn.className = 'btn-sm btn-revoke';
+    revokeBtn.textContent = 'Revoke';
+    (function(n) { revokeBtn.addEventListener('click', function() { revokeCard(revokeBtn, n); }); })(svcName);
+    actionsEl.appendChild(editBtn);
+    actionsEl.appendChild(revokeBtn);
+  }
+  card.dataset.expiryHours = defaultHours;
+  showToast('\u2705 ' + svcName + ' re-enabled');
+  if (card && card.dataset && card.dataset.service) {
+    syncServiceCard(card.dataset.service, true);
+  }
+  fetch('http://localhost:3000/api/expiry', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ service: card.dataset.service, expiryHours: defaultHours })
+  }).catch(function() {});
+}
+/* ════════════════════════════════
+   SERVICES — toggle connect / disconnect
+   ════════════════════════════════ */
+function setServiceState(svcCard, isLive, skipSyncPermission) {
+  var name = svcCard.querySelector('.svc-name').textContent.trim();
+  var isCurrentlyOff = svcCard.dataset.status === 'off';
+  if ((isLive && !isCurrentlyOff) || (!isLive && isCurrentlyOff)) return;
+  var dotEl = svcCard.querySelector('.svc-status-dot');
+  var detailEl = svcCard.querySelector('.svc-detail-text');
+  var actionBtn = svcCard.querySelector('.svc-action-btn');
+  var tags = svcCard.querySelectorAll('.svc-perm-list .svc-tag');
+  var permsEl = svcCard.querySelector('.svc-perms');
+  if (isLive) {
+    svcCard.dataset.status = 'live';
+    svcCard.style.transition = 'opacity .4s';
+    svcCard.style.opacity = '1';
+    dotEl.innerHTML = '<div class="dot dot-green"></div><span style="color:var(--green)">Live</span>';
+    detailEl.textContent = detailEl.textContent.replace('Disconnected', 'Reconnected \u00b7 just now');
+    tags.forEach(function(t) { t.style.opacity = '1'; });
+    if (permsEl) {
+      permsEl.style.opacity = '1';
+      permsEl.textContent = tags.length + (tags.length === 1 ? ' type' : ' types');
+    }
+    actionBtn.className = 'btn-disconnect svc-action-btn';
+    actionBtn.removeAttribute('style');
+    actionBtn.textContent = 'Disconnect ' + name;
+    if (!skipSyncPermission) {
+      showToast('\u2705 ' + name + ' reconnected');
+      syncPermissionCard(svcCard.dataset.svc, true);
+    }
+  } else {
+    svcCard.dataset.status = 'off';
+    svcCard.style.transition = 'opacity .4s';
+    svcCard.style.opacity = '.5';
+    dotEl.innerHTML = '<div class="dot dot-red"></div><span style="color:var(--red)">Off</span>';
+    detailEl.textContent = detailEl.textContent.split('\u00b7')[0].trim() + ' \u00b7 Disconnected';
+    tags.forEach(function(t) { t.style.opacity = '.4'; });
+    if (permsEl) permsEl.textContent = '0 types';
+    actionBtn.className = 'btn-sm btn-edit svc-action-btn';
+    actionBtn.style.cssText = 'width:100%;padding:8px';
+    actionBtn.textContent = 'Reconnect ' + name;
+    if (!skipSyncPermission) {
+      showToast('\ud83d\udd0c ' + name + ' disconnected');
+      syncPermissionCard(svcCard.dataset.svc, false);
+    }
+  }
+  updateSvcCount();
+}
+function syncServiceCard(svc, isLive) {
+  var svcCard = document.querySelector('#services .card[data-svc="' + svc + '"]');
+  if (svcCard) setServiceState(svcCard, isLive, true);
+}
+function toggleService(card) {
+  var isOff = card.dataset.status === 'off';
+  setServiceState(card, isOff, false);
+  var expand = card.querySelector('.svc-expand');
+  if (expand) setTimeout(function() { expand.classList.remove('open'); }, 600);
+}
+/* ── Cross-tab sync ── */
+function syncPermissionCard(svc, isReconnect) {
+  var permCard = document.querySelector('#permissions .card[data-service="' + svc + '"]');
+  if (!permCard) return;
+  var statusEl  = permCard.querySelector('.perm-status');
+  var whoEl     = permCard.querySelector('.perm-who');
+  var progRow   = permCard.querySelector('.prog-row');
+  var labelEl   = permCard.querySelector('.expiry-label') || permCard.querySelector('.perm-time');
+  var actionsEl = permCard.querySelector('.perm-actions');
+  var svcName   = permCard.querySelector('.perm-name').textContent.split('\u00b7')[0].trim();
+  if (isReconnect) {
+    permCard.style.transition = 'opacity .4s';
+    permCard.style.opacity = '1';
+    if (statusEl) { statusEl.className = 'perm-status status-active'; statusEl.textContent = 'ACTIVE'; }
+    if (whoEl) whoEl.textContent = 'Re-enabled via Services \u00b7 just now';
+    if (progRow) {
+      progRow.style.display = 'flex';
+      var fill = progRow.querySelector('.prog-fill');
+      var disp = progRow.querySelector('.expiry-display');
+      if (fill) { fill.style.background = 'var(--green)'; fill.style.width = '75%'; }
+      if (disp) { disp.textContent = '1d'; disp.style.color = 'var(--green)'; }
+    }
+    if (labelEl) { labelEl.className = 'perm-time expiry-label'; labelEl.textContent = '\u2713 Expires in 1 day'; }
+    if (actionsEl) {
+      actionsEl.innerHTML = '';
+      var editBtn = document.createElement('button');
+      editBtn.className = 'btn-sm btn-edit';
+      editBtn.textContent = 'Edit';
+      (function(c) { editBtn.addEventListener('click', function() { openEditModal(c); }); })(permCard);
+      var revokeBtn = document.createElement('button');
+      revokeBtn.className = 'btn-sm btn-revoke';
+      revokeBtn.textContent = 'Revoke';
+      (function(n) { revokeBtn.addEventListener('click', function() { revokeCard(revokeBtn, n); }); })(svcName);
+      actionsEl.appendChild(editBtn);
+      actionsEl.appendChild(revokeBtn);
+    }
+    permCard.dataset.expiryHours = '24';
+  } else {
+    permCard.style.transition = 'opacity .4s';
+    permCard.style.opacity = '.4';
+    if (statusEl) { statusEl.className = 'perm-status status-rev'; statusEl.textContent = 'REVOKED'; }
+    if (whoEl) whoEl.textContent = 'Revoked via Services \u00b7 just now';
+    if (progRow) progRow.style.display = 'none';
+    if (labelEl) { labelEl.className = 'perm-time'; labelEl.textContent = '\ud83d\udd12 No data shared'; }
+    if (actionsEl) {
+      actionsEl.innerHTML = '';
+      var reEnableBtn = document.createElement('button');
+      reEnableBtn.className = 'btn-sm btn-edit';
+      reEnableBtn.textContent = 'Re-enable';
+      (function(c) { reEnableBtn.addEventListener('click', function() { reEnableCard(c); }); })(permCard);
+      actionsEl.appendChild(reEnableBtn);
+    }
+  }
+}
+function updateSvcCount() {
+  var total = document.querySelectorAll('#services .card[data-svc]').length;
+  var live = document.querySelectorAll('#services .card[data-svc]:not([data-status="off"])').length;
+  var el = document.getElementById('svcCount');
+  if (el) el.textContent = live + ' of ' + total + ' connected';
+}
+function revokeService(btn, name) {
+  var card = btn.closest('.card');
+  if (card) toggleService(card);
+}
+/* ════════════════════════════════
+   EDIT EXPIRY MODAL
+   ════════════════════════════════ */
+var activeCard = null;
+var selectedHours = null;
+var selectedUnit = 'hours';
+function openEditModal(card) {
+  activeCard = card;
+  var currentHours = parseInt(card.dataset.expiryHours) || 24;
+  document.getElementById('modalIcon').textContent = card.querySelector('.perm-icon').textContent;
+  document.getElementById('modalServiceName').textContent = card.querySelector('.perm-name').textContent.split('\u00b7')[0].trim();
+  document.getElementById('modalCurrentExpiry').textContent = formatHours(currentHours);
+  selectedHours = currentHours;
+  selectedUnit = (currentHours % 24 === 0 && currentHours >= 24) ? 'days' : 'hours';
+  setUnit(selectedUnit, false);
+  document.getElementById('customExpiryValue').value = selectedUnit === 'days' ? currentHours / 24 : currentHours;
+  highlightPreset(currentHours);
+  updatePreview(currentHours);
+  document.getElementById('saveBtnText').textContent = 'Save Changes';
+  document.getElementById('saveBtn').disabled = false;
+  document.getElementById('editModal').classList.add('open');
+  requestAnimationFrame(function() {
+    document.getElementById('modalSheet').classList.add('open');
+  });
+}
+function closeEditModal() {
+  document.getElementById('modalSheet').classList.remove('open');
+  setTimeout(function() {
+    document.getElementById('editModal').classList.remove('open');
+    activeCard = null;
+  }, 340);
+}
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeEditModal();
+});
+function selectPreset(btn, hours) {
+  selectedHours = hours;
+  highlightPreset(hours);
+  document.getElementById('customExpiryValue').value = selectedUnit === 'days' ? (hours >= 24 ? hours / 24 : hours) : hours;
+  updatePreview(hours);
+}
+function highlightPreset(hours) {
+  document.querySelectorAll('.preset-btn').forEach(function(b) {
+    b.classList.toggle('active', parseInt(b.dataset.hours) === hours);
+  });
+}
+function setUnit(unit, updateInput) {
+  if (updateInput === undefined) updateInput = true;
+  selectedUnit = unit;
+  document.getElementById('unitHours').classList.toggle('active', unit === 'hours');
+  document.getElementById('unitDays').classList.toggle('active', unit === 'days');
+  if (updateInput && selectedHours) {
+    document.getElementById('customExpiryValue').value = unit === 'days' ? Math.round(selectedHours / 24) : selectedHours;
+  }
+}
+function onCustomInput() {
+  var raw = parseInt(document.getElementById('customExpiryValue').value);
+  if (!raw || raw < 1) return;
+  selectedHours = selectedUnit === 'days' ? raw * 24 : raw;
+  highlightPreset(selectedHours);
+  updatePreview(selectedHours);
+}
+function updatePreview(hours) {
+  document.getElementById('expiryPreviewText').textContent = 'Permission will expire in ' + formatHours(hours);
+}
+function formatHours(hours) {
+  if (hours < 1) return 'less than an hour';
+  if (hours < 24) return hours + (hours === 1 ? ' hour' : ' hours');
+  var d = Math.round(hours / 24);
+  return d + (d === 1 ? ' day' : ' days');
+}
+function shortLabel(hours) {
+  return hours < 24 ? hours + 'h' : Math.round(hours / 24) + 'd';
+}
+function urgencyTier(hours) {
+  if (hours <= 3)  return { color: 'var(--red)',   width: '10%', status: 'status-exp',    statusText: 'EXPIRING' };
+  if (hours <= 24) return { color: 'var(--amber)', width: '40%', status: 'status-exp',    statusText: 'EXPIRING' };
+  return                   { color: 'var(--green)', width: '75%', status: 'status-active', statusText: 'ACTIVE'   };
+}
+function saveExpiry() {
+  if (!activeCard || !selectedHours) return;
+  var service = activeCard.dataset.service;
+  var hours = selectedHours;
+  var tier = urgencyTier(hours);
+  activeCard.dataset.expiryHours = hours;
+  var displayEl = activeCard.querySelector('.expiry-display');
+  if (displayEl) { displayEl.textContent = shortLabel(hours); displayEl.style.color = tier.color; }
+  var fillEl = activeCard.querySelector('.prog-fill');
+  if (fillEl) { fillEl.style.background = tier.color; fillEl.style.width = tier.width; }
+  var labelEl = activeCard.querySelector('.expiry-label');
+  if (labelEl) {
+    if (hours <= 3) labelEl.textContent = '\u26a0\ufe0f Expires very soon';
+    else if (hours <= 24) labelEl.textContent = '\u23f1 Auto-expires in ' + formatHours(hours);
+    else labelEl.textContent = '\u2713 Expires in ' + formatHours(hours);
+  }
+  var statusEl = activeCard.querySelector('.perm-status');
+  if (statusEl) { statusEl.className = 'perm-status ' + tier.status; statusEl.textContent = tier.statusText; }
+  document.getElementById('modalCurrentExpiry').textContent = formatHours(hours);
+  showToast('\u2705 Expiry updated to ' + formatHours(hours));
+  closeEditModal();
+  fetch('http://localhost:3000/api/expiry', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ service: service, expiryHours: hours })
+  }).catch(function() {});
+}
+/* ── initial backend load ── */
+fetch('http://localhost:3000/api/trust-dashboard')
+  .then(function(r) { return r.json(); })
+  .then(function(data) { document.querySelector('.ring-num').innerHTML = data.score + '<small>/100</small>'; })
+  .catch(function() {});
+</script>
+</body>
+</html>

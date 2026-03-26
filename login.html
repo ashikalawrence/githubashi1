@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Hushh &mdash; Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style2.css">
+<style>
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, var(--surface2) 0%, var(--bg) 100%);
+  }
+  .login-container {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    text-align: center;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .login-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .login-logo span { color: purple; }
+  .login-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .input-group {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  .input-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .login-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .login-input:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .login-btn-main {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.1s, filter 0.2s;
+    margin-top: 10px;
+  }
+  .login-btn-main:hover {
+    filter: brightness(1.1);
+  }
+  .login-btn-main:active {
+    transform: scale(0.98);
+  }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-logo">HU<span>S</span>HH</div>
+  <div class="login-sub">Welcome to your Trust Dashboard</div>
+  
+  <form id="loginForm">
+    <div class="input-group">
+      <label class="input-label">Email Address</label>
+      <input type="email" class="login-input" placeholder="you@example.com" required id="emailInput" value="user@hushh.com"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Password</label>
+      <input type="password" class="login-input" placeholder="••••••••" required id="passInput" value="password123"/>
+    </div>
+    <button type="submit" class="login-btn-main">Access My Vault</button>
+  </form>
+</div>
+
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Simulate login
+    var btn = document.querySelector('.login-btn-main');
+    btn.textContent = 'Authenticating...';
+    btn.style.opacity = '0.7';
+    
+    setTimeout(function() {
+      localStorage.setItem('hushh_logged_in', 'true');
+      window.location.href = 'index.html';
+    }, 800);
+  });
+</script>
+</body>
+</html>
